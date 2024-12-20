@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -88,6 +91,12 @@ public class GameClient
     {
         try
         {
+            if (!isConnected || networkStream == null)
+            {
+                Debug.LogError("无法发送消息，客户端未连接到服务器。");
+                return;
+            }
+
             // 创建包头（固定字符串或协议）
             byte[] header = Encoding.UTF8.GetBytes("HEADER");
 
@@ -142,7 +151,8 @@ public class GameClient
 
             // 发送完整消息
             networkStream.Write(combinedMessage, 0, combinedMessage.Length);
-            Debug.Log($"已发送 NetworkMessage: 类型 {networkMessage.MessageType}, 数据大小 {messageBody.Length}");
+            //Debug.Log($"已发送 NetworkMessage: 类型 {networkMessage.MessageType}, 数据大小 {messageBody.Length}");
+            Debug.Log($"已发送 NetworkMessage:  包头长度: {header.Length}, 包体长度: {typeBytes.Length}, 消息类型长度: {typeBytes.Length}, 数据长度: {messageBytes.Length}, 总长度: {combinedMessage.Length}");
         }
         catch (Exception ex)
         {
@@ -155,59 +165,82 @@ public class GameClient
         }
     }
 
-    // 使用 Task 接收来自服务器的消息
+    private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     public async Task ReceiveMessages()
     {
+        List<byte> receiveBuffer = new List<byte>(); // 缓存缓冲区
+        byte[] buffer = new byte[1024]; // 临时读取缓冲区
+
         try
         {
-            byte[] buffer = new byte[1024];
-
-            while (isConnected)
+            while (isConnected && !cancellationTokenSource.Token.IsCancellationRequested)
             {
-                // 接收包头
-                int bytesRead = networkStream.Read(buffer, 0, 6);
+                // 异步读取数据
+                int bytesRead = await networkStream.ReadAsync(buffer, 0, buffer.Length);
                 if (bytesRead == 0)
                 {
                     Debug.Log("服务器断开连接。");
+                    Disconnect();
                     break;
                 }
 
-                string header = Encoding.UTF8.GetString(buffer, 0, 6);
+                // 将读取的数据加入到缓存缓冲区
+                receiveBuffer.AddRange(buffer.Take(bytesRead));
 
-                if (header != "HEADER")
+                // 开始解析缓存中的数据
+                while (receiveBuffer.Count >= 6) // 至少包含包头(6字节)
                 {
-                    Debug.Log("收到无效的包头。");
-                    continue;
-                }
+                    // 检查包头
+                    string header = Encoding.UTF8.GetString(receiveBuffer.Take(6).ToArray());
+                    if (header != "HEADER")
+                    {
+                        Debug.Log("收到无效的包头。");
+                        receiveBuffer.RemoveRange(0, 6); // 跳过无效包头
+                        continue;
+                    }
 
-                // 接收包体长度
-                bytesRead = networkStream.Read(buffer, 0, 4);
-                int messageLength = BitConverter.ToInt32(buffer, 0);
+                    // 确保至少有长度字段
+                    if (receiveBuffer.Count < 10)
+                    {
+                        Debug.Log("数据包不完整，等待更多数据...");
+                        break; // 跳出循环，等待更多数据
+                    }
 
-                // 接收包体
-                byte[] messageBuffer = new byte[messageLength];
-                int totalReceived = 0;
+                    // 读取长度字段
+                    int messageLength = BitConverter.ToInt32(receiveBuffer.Skip(6).Take(4).ToArray(), 0);
 
-                while (totalReceived < messageLength)
-                {
-                    bytesRead = networkStream.Read(messageBuffer, totalReceived, messageLength - totalReceived);
-                    totalReceived += bytesRead;
-                }
+                    // 确保消息体完整
+                    if (receiveBuffer.Count < 10 + messageLength)
+                    {
+                        Debug.Log("数据包不完整，等待更多数据...");
+                        break; // 跳出循环，等待更多数据
+                    }
 
-                // 尝试解析为 NetworkMessage
-                if (TryParseNetworkMessage(messageBuffer, out NetworkMessage networkMessage))
-                {
-                    Debug.Log($"收到来自服务器的消息 NetworkMessage: 类型={networkMessage.MessageType}, 数据大小={networkMessage.Data.Length}");
-                    ReceiveDataAction_NetworkMessage?.Invoke(networkMessage);
-                }
-                else
-                {
-                    // 默认处理为字符串消息
-                    string receivedMessage = Encoding.UTF8.GetString(messageBuffer);
-                    Debug.Log($"收到来自服务器的字符串消息: {receivedMessage}");
-                    ReceiveDataAction?.Invoke(receivedMessage);
+                    // 读取消息体
+                    byte[] messageBuffer = receiveBuffer.Skip(10).Take(messageLength).ToArray();
+
+                    // 从缓存中移除已处理的数据
+                    receiveBuffer.RemoveRange(0, 10 + messageLength);
+
+                    // 尝试解析为 NetworkMessage
+                    if (TryParseNetworkMessage(messageBuffer, out NetworkMessage networkMessage))
+                    {
+                        Debug.Log($"收到来自服务器的消息 NetworkMessage: 类型={networkMessage.MessageType}, 数据大小={networkMessage.Data.Length}");
+                        ReceiveDataAction_NetworkMessage?.Invoke(networkMessage);
+                    }
+                    else
+                    {
+                        // 默认处理为字符串消息
+                        string receivedMessage = Encoding.UTF8.GetString(messageBuffer);
+                        Debug.Log($"收到来自服务器的字符串消息: {receivedMessage}");
+                        ReceiveDataAction?.Invoke(receivedMessage);
+                    }
                 }
             }
+        }
+        catch (OperationCanceledException)
+        {
+            Debug.Log("接收任务已取消。");
         }
         catch (Exception ex)
         {
@@ -216,16 +249,29 @@ public class GameClient
         finally
         {
             Debug.Log("连接已关闭。");
-            tcpClient?.Close();
+            Disconnect();
         }
     }
 
+
     public void Disconnect()
     {
+        if (!isConnected) return;
         isConnected = false;
+
+        // 取消接收任务
+        cancellationTokenSource.Cancel();
+
+        // 关闭网络流和 TCP 客户端
+        networkStream?.Close();
+        networkStream = null;
+
         tcpClient?.Close();
+        tcpClient = null;
+
         Debug.Log("客户端已断开连接。");
     }
+
 
     private bool TryParseNetworkMessage(byte[] messageBuffer, out NetworkMessage networkMessage)
     {

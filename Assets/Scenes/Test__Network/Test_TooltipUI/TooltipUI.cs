@@ -13,7 +13,7 @@ public class TooltipUI : MonoBehaviour
     // 添加一条日志
     public void AddLog(string message)
     {
-        Debug.Log(message);
+        //Debug.Log(message);
 
         // 实例化日志条目
         GameObject logEntry = Instantiate(logEntryPrefab, content);

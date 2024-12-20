@@ -227,7 +227,7 @@ public class GameClientManager : MonoBehaviour
             Y = y,
             Z = z
         };
-
+        print("客户端发送的数据内容: "  + positionMessage.PrintInfo() ); 
         // 转换为 NetworkMessage
         NetworkMessage networkMessage = new NetworkMessage(MessageType.PositionUpdate, positionMessage.ToByteArray());
 
