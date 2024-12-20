@@ -273,7 +273,7 @@ public class GameClient
             if (messageBuffer.Length >= 4)
             {
                 // 前4字节为消息类型
-                MessageType messageType = (MessageType)BitConverter.ToInt32(messageBuffer, 0);
+                NetworkMessageType messageType = (NetworkMessageType)BitConverter.ToInt32(messageBuffer, 0);
 
                 // 剩余部分为数据内容
                 byte[] data = new byte[messageBuffer.Length - 4];

@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 
-public enum MessageType
+public enum NetworkMessageType
 {
     PositionUpdate,
     CharacterAction,
@@ -15,11 +15,11 @@ public enum MessageType
 
 public class NetworkMessage
 {
-    public MessageType MessageType;   // 消息类型
+    public NetworkMessageType MessageType;   // 消息类型
     public byte[] Data;               // 数据内容
 
 
-    public NetworkMessage(MessageType type, byte[] data)
+    public NetworkMessage(NetworkMessageType type, byte[] data)
     {
         MessageType = type;
         Data = data;
@@ -30,17 +30,17 @@ public class NetworkMessage
     {
         switch (message.MessageType)
         {
-            case MessageType.PositionUpdate:
+            case NetworkMessageType.PositionUpdate:
                 PositionUpdateMessage posMsg = PositionUpdateMessage.FromByteArray(message.Data);
                 // 更新角色位置
                 break;
 
-            case MessageType.CharacterAction:
+            case NetworkMessageType.CharacterAction:
                 CharacterActionMessage actionMsg = CharacterActionMessage.FromByteArray(message.Data);
                 // 执行角色操作
                 break;
 
-            case MessageType.ObjectSpawn:
+            case NetworkMessageType.ObjectSpawn:
                 ObjectSpawnMessage spawnMsg = ObjectSpawnMessage.FromByteArray(message.Data);
                 // 生成物体
                 break;

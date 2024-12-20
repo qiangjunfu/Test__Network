@@ -147,21 +147,21 @@ public class GameClientManager : MonoBehaviour
             string receiveData = "";
             switch (networkMessage.MessageType)
             {
-                case MessageType.PositionUpdate:
+                case NetworkMessageType.PositionUpdate:
                     // 反序列化为 PositionUpdateMessage
                     PositionUpdateMessage posMsg = PositionUpdateMessage.FromByteArray(networkMessage.Data);
                     Debug.Log("处理位置更新消息");
                     receiveData = posMsg.PrintInfo();
                     break;
 
-                case MessageType.CharacterAction:
+                case NetworkMessageType.CharacterAction:
                     // 反序列化为 CharacterActionMessage
                     CharacterActionMessage actionMsg = CharacterActionMessage.FromByteArray(networkMessage.Data);
                     Debug.Log("处理角色动作消息");
                     receiveData = actionMsg.PrintInfo();
                     break;
 
-                case MessageType.ObjectSpawn:
+                case NetworkMessageType.ObjectSpawn:
                     // 反序列化为 ObjectSpawnMessage
                     ObjectSpawnMessage spawnMsg = ObjectSpawnMessage.FromByteArray(networkMessage.Data);
                     Debug.Log("处理对象生成消息");
@@ -229,7 +229,7 @@ public class GameClientManager : MonoBehaviour
         };
         //print("客户端发送的数据内容: "  + positionMessage.PrintInfo() ); 
         // 转换为 NetworkMessage
-        NetworkMessage networkMessage = new NetworkMessage(MessageType.PositionUpdate, positionMessage.ToByteArray());
+        NetworkMessage networkMessage = new NetworkMessage(NetworkMessageType.PositionUpdate, positionMessage.ToByteArray());
 
 
         SendData(networkMessage);
