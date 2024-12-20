@@ -9,7 +9,10 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
-/ZZ_Package
+
+# /ZZ_Package
+# /ZZ
+
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

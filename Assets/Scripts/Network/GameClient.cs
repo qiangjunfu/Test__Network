@@ -144,8 +144,7 @@ public class GameClient
 
             // 发送完整消息
             networkStream.Write(combinedMessage, 0, combinedMessage.Length);
-            //Debug.Log($"已发送 NetworkMessage: 类型 {networkMessage.MessageType}, 数据大小 {messageBody.Length}");
-            Debug.Log($"已发送 NetworkMessage: 包头长度: {header.Length}, 包体长度: {lengthBytes.Length}, 消息类型长度: {typeBytes.Length}, 数据长度: {messageBytes.Length}, 总长度: {combinedMessage.Length}");
+            //Debug.Log($"已发送 NetworkMessage: 包头长度: {header.Length}, 包体长度: {lengthBytes.Length}, 消息类型长度: {typeBytes.Length}, 数据长度: {messageBytes.Length}, 总长度: {combinedMessage.Length}");
         }
         catch (Exception ex)
         {
