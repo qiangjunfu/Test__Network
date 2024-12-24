@@ -1,0 +1,14 @@
+E:\Csharp\GameServer__TCP\GameServer__TCP\bin\Release\net9.0\GameServer__TCP.exe
+E:\Csharp\GameServer__TCP\GameServer__TCP\bin\Release\net9.0\GameServer__TCP.deps.json
+E:\Csharp\GameServer__TCP\GameServer__TCP\bin\Release\net9.0\GameServer__TCP.runtimeconfig.json
+E:\Csharp\GameServer__TCP\GameServer__TCP\bin\Release\net9.0\GameServer__TCP.dll
+E:\Csharp\GameServer__TCP\GameServer__TCP\bin\Release\net9.0\GameServer__TCP.pdb
+E:\Csharp\GameServer__TCP\GameServer__TCP\obj\Release\net9.0\GameServer__TCP.GeneratedMSBuildEditorConfig.editorconfig
+E:\Csharp\GameServer__TCP\GameServer__TCP\obj\Release\net9.0\GameServer__TCP.AssemblyInfoInputs.cache
+E:\Csharp\GameServer__TCP\GameServer__TCP\obj\Release\net9.0\GameServer__TCP.AssemblyInfo.cs
+E:\Csharp\GameServer__TCP\GameServer__TCP\obj\Release\net9.0\GameServer__TCP.csproj.CoreCompileInputs.cache
+E:\Csharp\GameServer__TCP\GameServer__TCP\obj\Release\net9.0\GameServer__TCP.dll
+E:\Csharp\GameServer__TCP\GameServer__TCP\obj\Release\net9.0\refint\GameServer__TCP.dll
+E:\Csharp\GameServer__TCP\GameServer__TCP\obj\Release\net9.0\GameServer__TCP.pdb
+E:\Csharp\GameServer__TCP\GameServer__TCP\obj\Release\net9.0\GameServer__TCP.genruntimeconfig.cache
+E:\Csharp\GameServer__TCP\GameServer__TCP\obj\Release\net9.0\ref\GameServer__TCP.dll
