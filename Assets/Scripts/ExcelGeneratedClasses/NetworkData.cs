@@ -7,11 +7,11 @@ using UnityEngine;
 [System.Serializable]
 public class NetworkData
 {
-    [SerializeField] public int id;
-    [SerializeField] public int clientId;
-    [SerializeField] public int clientType;
-    [SerializeField] public string serverIp;
-    [SerializeField] public int serverPort;
+    [SerializeField, ReadOnly] public int id;
+    [SerializeField, ReadOnly] public int clientId;
+    [SerializeField, ReadOnly] public int clientType;
+    [SerializeField, ReadOnly] public string serverIp;
+    [SerializeField, ReadOnly] public int serverPort;
 
 
     public NetworkData() { }

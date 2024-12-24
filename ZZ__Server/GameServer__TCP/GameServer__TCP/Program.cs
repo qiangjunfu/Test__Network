@@ -194,7 +194,7 @@ public class GameServer
     {
         byte[] combinedMessage = PrepareNetworkMessage(networkMessage);
 
-        Log(" ------------------------广播开始------------------------");
+        //Log(" ------------------------广播开始------------------------");
         var tasks = new List<Task>();
         foreach (var kvp in Clients)
         {

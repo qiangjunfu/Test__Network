@@ -7,20 +7,20 @@ using UnityEngine;
 [System.Serializable]
 public class TestData
 {
-    [SerializeField] public int id;
-    [SerializeField] public string Name;
-    [SerializeField] public int Age;
-    [SerializeField] public string Email;
-    [SerializeField] public string id2;
-    [SerializeField] public bool isA;
-    [SerializeField] public int[] aa;
-    [SerializeField] public string[] bb;
-    [SerializeField] public bool[] cc;
-    [SerializeField] public float[] dd;
-    [SerializeField] public float ee;
-    [SerializeField] public float ff;
-    [SerializeField] public float[] gg;
-    [SerializeField] public string[] hh;
+    [SerializeField, ReadOnly] public int id;
+    [SerializeField, ReadOnly] public string Name;
+    [SerializeField, ReadOnly] public int Age;
+    [SerializeField, ReadOnly] public string Email;
+    [SerializeField, ReadOnly] public string id2;
+    [SerializeField, ReadOnly] public bool isA;
+    [SerializeField, ReadOnly] public int[] aa;
+    [SerializeField, ReadOnly] public string[] bb;
+    [SerializeField, ReadOnly] public bool[] cc;
+    [SerializeField, ReadOnly] public float[] dd;
+    [SerializeField, ReadOnly] public float ee;
+    [SerializeField, ReadOnly] public float ff;
+    [SerializeField, ReadOnly] public float[] gg;
+    [SerializeField, ReadOnly] public string[] hh;
 
 
     public TestData() { }
