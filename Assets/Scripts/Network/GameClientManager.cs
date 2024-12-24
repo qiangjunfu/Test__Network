@@ -83,7 +83,8 @@ public class GameClientManager : MonoBehaviour
     [SerializeField] private string serverIp = "10.161.6.104";
     [SerializeField] private int serverPort = 12345;
     [SerializeField] private int clientId = 0;
-    [SerializeField] private int clientType = 111;
+    //成员类型 1.导演端  2.裁判端  3.操作端1  4.操作端2 
+    [SerializeField] private int clientType = 0;
     [SerializeField] private string receiveData = "";
     [SerializeField] private NetworkMessage networkMessage = null;
     [SerializeField] private NetworkMessage networkMessage_last = null;
@@ -103,6 +104,7 @@ public class GameClientManager : MonoBehaviour
         NetworkData networkData = JsonFileManager.Instance.GetNetworkDataList()[0];
         if (networkData != null)
         {
+            clientType = networkData.clientType;
             serverIp = networkData.serverIp;
             serverPort = networkData.serverPort;
             tooltipUI?.AddLog($"networkData  serverIp: {networkData.serverIp} , {networkData.serverPort} ");

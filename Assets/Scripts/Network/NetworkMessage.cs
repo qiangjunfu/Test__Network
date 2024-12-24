@@ -58,8 +58,14 @@ public class NetworkMessage
 
 public class ClientMessageBase
 {
-    public int ClientId;       // 客户端 ID，唯一标识
-    public int ClientType;     //成员类型 1导演端 2操作端 3裁判端
+    /// <summary>
+    /// 客户端 ID，唯一标识
+    /// </summary>
+    public int ClientId; 
+    /// <summary>
+    /// 成员类型 1.导演端  2.裁判端  3.操作端1  4.操作端2 
+    /// </summary>
+    public int ClientType;
 
     //public byte[] ToByteArray()
     //{

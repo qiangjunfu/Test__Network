@@ -2,6 +2,7 @@
     {
         "id": 1,
         "clientId": 0,
+        "clientType": 1,
         "serverIp": "10.161.6.104",
         "serverPort": 12345
     }

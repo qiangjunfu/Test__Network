@@ -9,6 +9,7 @@ public class NetworkData
 {
     [SerializeField] public int id;
     [SerializeField] public int clientId;
+    [SerializeField] public int clientType;
     [SerializeField] public string serverIp;
     [SerializeField] public int serverPort;
 

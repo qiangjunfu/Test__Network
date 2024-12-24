@@ -645,6 +645,11 @@ PrefabInstance:
       propertyPath: tooltipUI
       value: 
       objectReference: {fileID: 862116876}
+    - target: {fileID: 1451336196371515968, guid: c84c8ca5799fdfd43aa0a6ecebe6795c,
+        type: 3}
+      propertyPath: clientType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1451336196371515969, guid: c84c8ca5799fdfd43aa0a6ecebe6795c,
         type: 3}
       propertyPath: m_LocalPosition.x
