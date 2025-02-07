@@ -692,13 +692,8 @@ PrefabInstance:
       objectReference: {fileID: 862116876}
     - target: {fileID: 1451336196371515968, guid: c84c8ca5799fdfd43aa0a6ecebe6795c,
         type: 3}
-      propertyPath: clientType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1451336196371515968, guid: c84c8ca5799fdfd43aa0a6ecebe6795c,
-        type: 3}
       propertyPath: serverIp
-      value: 10.161.6.219
+      value: 127.0.0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1451336196371515969, guid: c84c8ca5799fdfd43aa0a6ecebe6795c,
         type: 3}

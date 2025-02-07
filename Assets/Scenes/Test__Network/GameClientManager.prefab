@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1451336196371515969}
   - component: {fileID: 1451336196371515968}
-  - component: {fileID: 287768285}
   m_Layer: 0
   m_Name: GameClientManager
   m_TagString: Untagged
@@ -44,24 +43,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf518115e64d624c8e3c53166009c95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverIp: 10.161.6.104
+  serverIp: 10.161.6.219
   serverPort: 12345
   clientId: 0
-  clientType: 111
+  clientType: 0
   receiveData: 
   tooltipUI: {fileID: 0}
---- !u!114 &287768285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1451336196371515971}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b9c9c9cf2166d48a508350be83994d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  folderPath: 
-  m_TestDataList: []
-  m_NetworkDataList: []

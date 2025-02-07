@@ -118,7 +118,7 @@ public class GameClientManager : MonoBehaviour
         }
         else
         {
-            tooltipUI.AddLog("Error   networkData == null ");
+            //tooltipUI.AddLog("Error   networkData == null ");
         }
 
         gameClient = new GameClient(serverIp, serverPort);
