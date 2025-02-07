@@ -96,12 +96,19 @@ public class GameClientManager : MonoBehaviour
     [SerializeField] private TooltipUI tooltipUI;
 
 
+    private float heartbeatInterval = 10f;
+    private float heartbeatTimer = 0f;
+
+
+
     void Start()
     {
         //ExcelFileManager.Instance.Init();
         //NetworkData networkData = ExcelFileManager.Instance.GetNetworkDataList()[0];
-        JsonFileManager.Instance.Init();
-        NetworkData networkData = JsonFileManager.Instance.GetNetworkDataList()[0];
+        //JsonFileManager.Instance.Init();
+        //NetworkData networkData = JsonFileManager.Instance.GetNetworkDataList()[0];
+        JsonUtilityFileManager.Instance.Init();
+        NetworkData networkData = JsonUtilityFileManager.Instance.GetNetworkDataList()[0];
         if (networkData != null)
         {
             clientType = networkData.clientType;
@@ -191,6 +198,15 @@ public class GameClientManager : MonoBehaviour
         }
 
         ReceiveDataHandle();
+
+
+
+        heartbeatTimer += Time.deltaTime;
+        if (heartbeatTimer >= heartbeatInterval)
+        {
+            SendHeartbeat();  // 发送心跳包
+            heartbeatTimer = 0f;  // 重置计时器
+        }
     }
 
 
@@ -212,6 +228,7 @@ public class GameClientManager : MonoBehaviour
         // 发送消息
         gameClient.SendNetworkMessage(networkMessage);
     }
+
 
 
     // 使用示例
@@ -238,26 +255,13 @@ public class GameClientManager : MonoBehaviour
     }
 
 
-
-    //private int index = 1;
-    //private object indexLock = new object(); // 锁对象，确保线程安全
-    //void SendData1()
-    //{
-    //    // 发送消息任务
-    //    Task.Run(async () =>
-    //    {
-    //        int newIndex;
-    //        lock (indexLock)
-    //        {
-    //            index *= 2; // 线程安全地更新 index
-    //            newIndex = index;
-    //        }
-
-    //        //await Task.Delay(1000); // 模拟延迟
-
-    //    });
-    //}
-
+    // 发送心跳包的方法
+    private void SendHeartbeat()
+    {
+        string heartbeatMessage = "HEARTBEAT";
+        gameClient.SendMessage(heartbeatMessage);  
+        Debug.Log("发送心跳包...");
+    }
 
     #endregion
 
