@@ -82,9 +82,9 @@ public class GameClientManager : MonoBehaviour
 
     [SerializeField] private string serverIp = "10.161.6.104";
     [SerializeField] private int serverPort = 12345;
-    [SerializeField] private int clientId = 0;
+    [SerializeField] public int clientId = 0;
     //成员类型 1.导演端  2.裁判端  3.操作端1  4.操作端2 
-    [SerializeField] private int clientType = 0;
+    [SerializeField] public int clientType = 0;
     [SerializeField] private string receiveData = "";
     [SerializeField] private NetworkMessage networkMessage = null;
     [SerializeField] private NetworkMessage networkMessage_last = null;
@@ -94,10 +94,6 @@ public class GameClientManager : MonoBehaviour
     public event Action<NetworkMessage> OnNetworkMessageReceived;
 
     [SerializeField] private TooltipUI tooltipUI;
-
-
-    private float heartbeatInterval = 10f;
-    private float heartbeatTimer = 0f;
 
 
 
@@ -127,6 +123,7 @@ public class GameClientManager : MonoBehaviour
         gameClient.ReceiveDataAction_NetworkMessage += ReceiveDataActionCallback__2;
         gameClient.ConnectToServer();
     }
+
 
     #region 接收服务器数据处理
     private void ReceiveDataActionCallback__2(NetworkMessage networkMessage)
@@ -158,21 +155,21 @@ public class GameClientManager : MonoBehaviour
             {
                 case NetworkMessageType.PositionUpdate:
                     // 反序列化为 PositionUpdateMessage
-                    PositionUpdateMessage posMsg = PositionUpdateMessage.FromByteArray(networkMessage.Data);
+                    PositionUpdateMessage posMsg = JsonUtilityFileManager.Instance.ByteArrayToJson<PositionUpdateMessage>(networkMessage.Data);
                     Debug.Log("处理位置更新消息");
                     receiveData = posMsg.PrintInfo();
                     break;
 
                 case NetworkMessageType.CharacterAction:
                     // 反序列化为 CharacterActionMessage
-                    CharacterActionMessage actionMsg = CharacterActionMessage.FromByteArray(networkMessage.Data);
+                    CharacterActionMessage actionMsg = JsonUtilityFileManager.Instance.ByteArrayToJson<CharacterActionMessage>(networkMessage.Data);
                     Debug.Log("处理角色动作消息");
                     receiveData = actionMsg.PrintInfo();
                     break;
 
                 case NetworkMessageType.ObjectSpawn:
                     // 反序列化为 ObjectSpawnMessage
-                    ObjectSpawnMessage spawnMsg = ObjectSpawnMessage.FromByteArray(networkMessage.Data);
+                    ObjectSpawnMessage spawnMsg = JsonUtilityFileManager.Instance.ByteArrayToJson<ObjectSpawnMessage>(networkMessage.Data);
                     Debug.Log("处理对象生成消息");
                     receiveData = spawnMsg.PrintInfo();
                     break;
@@ -201,15 +198,29 @@ public class GameClientManager : MonoBehaviour
 
 
 
+        SendHeartbeat();
+
+    }
+
+    #region 心跳检测
+    private float heartbeatInterval = 10f;
+    private float heartbeatTimer = 0f;
+
+    private void SendHeartbeat()
+    {
         heartbeatTimer += Time.deltaTime;
         if (heartbeatTimer >= heartbeatInterval)
         {
-            SendHeartbeat();  // 发送心跳包
-            heartbeatTimer = 0f;  // 重置计时器
+            string heartbeatMessage = "HEARTBEAT";
+            gameClient.SendMessage(heartbeatMessage);
+            Debug.Log("发送心跳包...");
+
+            heartbeatTimer = 0f;
         }
+
+
     }
-
-
+    #endregion
 
 
     private void OnDestroy2()
@@ -248,25 +259,13 @@ public class GameClientManager : MonoBehaviour
         };
         //print("客户端发送的数据内容: "  + positionMessage.PrintInfo() ); 
         // 转换为 NetworkMessage
-        NetworkMessage networkMessage = new NetworkMessage(NetworkMessageType.PositionUpdate, positionMessage.ToByteArray());
+        NetworkMessage networkMessage = new NetworkMessage(NetworkMessageType.PositionUpdate, JsonUtilityFileManager.Instance .JsonToByteArray <PositionUpdateMessage>(positionMessage));
 
 
         SendData(networkMessage);
     }
 
 
-    // 发送心跳包的方法
-    private void SendHeartbeat()
-    {
-        string heartbeatMessage = "HEARTBEAT";
-        gameClient.SendMessage(heartbeatMessage);  
-        Debug.Log("发送心跳包...");
-    }
-
     #endregion
 
-
-    #region Log
-
-    #endregion
 }

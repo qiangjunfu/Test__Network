@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using UnityEngine;
 
 public class JsonUtilityFileManager : MonoBehaviour
@@ -120,15 +121,6 @@ public class JsonUtilityFileManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 自定义解析 JSON 数组的方法
-    /// </summary>
-    private List<T> JsonUtilityArray<T>(string json)
-    {
-        string wrappedJson = $"{{ \"data\": {json} }}"; // 包装成对象
-        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(wrappedJson);
-        return wrapper.data;
-    }
 
     #region GetDataList
 
@@ -140,9 +132,40 @@ public class JsonUtilityFileManager : MonoBehaviour
 
     #endregion
 
+
+
+    #region MyRegion
+
+    /// <summary>
+    /// 自定义解析 JSON 数组的方法
+    /// </summary>
+    private List<T> JsonUtilityArray<T>(string json)
+    {
+        string wrappedJson = $"{{ \"data\": {json} }}"; // 包装成对象
+        Wrapper<T> wrapper = JsonUtility.FromJson<Wrapper<T>>(wrappedJson);
+        return wrapper.data;
+    }
+
     [Serializable]
     private class Wrapper<T>
     {
         public List<T> data;
     }
+
+
+    public byte[] JsonToByteArray <T>(T message) 
+    {
+        string jsonString = JsonUtility.ToJson(message);
+        //print($"JsonToByteArray : {jsonString}");
+        return Encoding.UTF8.GetBytes(jsonString);
+    }
+    public T  ByteArrayToJson<T>(byte[] data)  
+    {
+        string jsonString = Encoding.UTF8.GetString(data);
+        //print($"ByteArrayToJson : {jsonString}");
+        return JsonUtility.FromJson<T>(jsonString);
+    }
+
+    #endregion
+
 }
